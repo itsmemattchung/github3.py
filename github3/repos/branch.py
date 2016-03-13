@@ -80,13 +80,17 @@ class Branch(GitHubCore):
             'enforcement_level': enforcement, 'contexts': status_checks}}}
         json = self._json(self._patch(self._api, data=dumps(edit),
                                       headers=self.PREVIEW_HEADERS), 200)
-        self._update_attributes(json)
-        return True
+        if json:
+            self._update_attributes(json)
+            return True
+        return False
 
     def unprotect(self):
         """Disable force push protection on this branch."""
         edit = {'protection': {'enabled': False}}
         json = self._json(self._patch(self._api, data=dumps(edit),
                                       headers=self.PREVIEW_HEADERS), 200)
-        self._update_attributes(json)
-        return True
+        if json:
+            self._update_attributes(json)
+            return True
+        return False
